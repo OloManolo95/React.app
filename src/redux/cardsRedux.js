@@ -11,11 +11,13 @@ export const getFavoriteCard = state => state.cards.filter((card) => card.isFavo
 // actions
 const createActionName = actionName => `app/card/${actionName}`;
 const ADD_CARD = createActionName('ADD_CARD');
+const REMOVE_CARD = createActionName('REMOVE_CARD');
 const TOGGLE_CARD_FAVORITE = createActionName('TOGGLE_CARD_FAVORITE')
 
 // action creators
-export const addCard = payload => ({ type: 'ADD_CARD', payload });
-export const toggleFavorite = payload => ({ type: 'TOGGLE_CARD_FAVORITE', payload });
+export const addCard = payload => ({ type: ADD_CARD, payload });
+export const toggleFavorite = payload => ({ type: TOGGLE_CARD_FAVORITE, payload });
+export const removeCard = payload => ({ type: REMOVE_CARD, payload });
 
 const cardsReducer = (statePart = [], action) => {
     switch(action.type) {
@@ -23,6 +25,8 @@ const cardsReducer = (statePart = [], action) => {
         return [...statePart, { ...action.payload, id: shortid() }];
       case TOGGLE_CARD_FAVORITE:
         return statePart.map(card => (card.id === action.payload) ? { ...card, isFavorite: !card.isFavorite } : card);
+      case REMOVE_CARD:
+        return [...statePart.filter((card) => card.id !== action.payload)];
       default:
         return statePart;
     }
